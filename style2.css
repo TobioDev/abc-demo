@@ -191,6 +191,13 @@
     pointer-events: none;
   }
 
+  @media (min-width: 721px) and (hover: hover) and (pointer: fine) {
+    .scroll-progress {
+      block-size: 4px;
+      background: var(--brand-soft);
+    }
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     @supports ((animation-timeline: scroll()) and (animation-range: 0% 100%)) {
       @keyframes progress-grow {
@@ -576,7 +583,6 @@
     inset-inline-end: clamp(-10rem, -4vw, 4rem);
     inset-block-start: 52%;
     translate: 0 -50%;
-    transform: translate3d(var(--px, 0px), var(--py, 0px), 0);
     inline-size: clamp(28rem, 52vw, 50rem);
     aspect-ratio: 1;
     z-index: -1;
@@ -587,8 +593,41 @@
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    .hero-emblem svg {
+    .hero-emblem {
+      --emblem-trace-duration: 500ms;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .hero-emblem {
+        --emblem-trace-duration: 950ms;
+      }
+    }
+
+    .hero-emblem:not(.is-drawing) {
+      transform: translate3d(var(--px, 0px), var(--py, 0px), 0);
+    }
+
+    .hero-emblem:not(.is-drawing) svg {
       transform: rotate(var(--emblem-rot, 0deg)) scale(var(--emblem-scale, 1));
+    }
+
+    .hero-emblem.is-drawing .hero-emblem-outline {
+      stroke-dasharray: 1;
+      animation: emblem-trace var(--emblem-trace-duration) ease-in-out both;
+    }
+
+    .hero-emblem.is-drawing .hero-emblem-details {
+      animation: editorial-fade-in 350ms var(--emblem-trace-duration) var(--ease-editorial) both;
+    }
+
+    @keyframes emblem-trace {
+      from { stroke-dashoffset: 1; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes editorial-fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     @supports ((animation-timeline: scroll()) and (animation-range: 0% 100%)) {
@@ -597,7 +636,7 @@
         to { transform: rotate(54deg) scale(1.04); }
       }
 
-      .hero-emblem svg {
+      .hero-emblem:not(.is-drawing) svg {
         animation: pentagon-scroll-spin linear both;
         animation-timeline: scroll(block root);
         animation-range: 0px 900px;
@@ -1078,6 +1117,46 @@
     color: var(--brand-soft);
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    .places-showcase .js-places-ready:not(.is-visible) {
+      opacity: 0;
+    }
+
+    .places-showcase .place-frame.is-visible {
+      --entry-tilt: -1.4deg;
+      animation: place-settle 450ms var(--ease-editorial) both;
+    }
+
+    .places-showcase .place-frame--rect.is-visible {
+      --entry-tilt: 1.4deg;
+    }
+
+    .places-showcase .places-caption.is-visible {
+      animation: editorial-fade-in 300ms ease-out both;
+    }
+
+    @media (min-width: 721px) {
+      .places-showcase .place-frame--rect.is-visible {
+        animation-delay: 140ms;
+      }
+
+      .places-showcase .places-caption.is-visible {
+        animation-delay: 590ms;
+      }
+    }
+
+    @keyframes place-settle {
+      from {
+        opacity: 0;
+        transform: translateY(10px) rotate(var(--entry-tilt));
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
+
   /* --- Ambiente & Spreco alimentare (Layout bicolore elegante) --- */
   .dual-impact {
     display: grid;
@@ -1470,6 +1549,10 @@
     align-items: start;
   }
 
+  #contatti .contact-grid {
+    align-items: center;
+  }
+
   .contact-title {
     font-size: clamp(3rem, 1.8rem + 4.2vw, 5.5rem);
     line-height: 0.94;
@@ -1488,6 +1571,28 @@
     color: var(--ink);
   }
 
+  .contact-details {
+    font-style: normal;
+  }
+
+  .contact-details dl {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .contact-details dl > div {
+    padding-block-end: 1rem;
+    border-block-end: 1px solid var(--line-dark);
+  }
+
+  .contact-details dd {
+    margin: 0.35rem 0 0;
+  }
+
+  .contact-details a {
+    font-weight: 600;
+  }
+
   .contact-form {
     display: grid;
     gap: 1.75rem;
@@ -1504,7 +1609,8 @@
     gap: 0.35rem;
   }
 
-  .field label {
+  .field label,
+  .contact-details dt {
     font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.18em;

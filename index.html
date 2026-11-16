@@ -67,11 +67,13 @@
       <div class="hero-emblem" aria-hidden="true">
         <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
           <!-- Geometria pentagonale ispirata al marchio ABC e alla Mole Vanvitelliana -->
-          <polygon points="200,18 373,144 307,348 93,348 27,144" stroke="currentColor" stroke-width="1.2" />
-          <polygon points="200,56 337,156 285,317 115,317 63,156" stroke="currentColor" stroke-width="0.9" stroke-dasharray="4 6" />
-          <polygon points="200,98 297,168 260,282 140,282 103,168" stroke="currentColor" stroke-width="1.1" />
-          <path d="M200 18 L244 134 M373 144 L268 198 M307 348 L224 260 M93 348 L158 242 M27 144 L148 164" stroke="currentColor" stroke-width="0.9" />
-          <circle cx="200" cy="200" r="184" stroke="currentColor" stroke-width="0.6" opacity="0.45" />
+          <polygon class="hero-emblem-outline" pathLength="1" points="200,18 373,144 307,348 93,348 27,144" stroke="currentColor" stroke-width="1.2" />
+          <g class="hero-emblem-details">
+            <polygon points="200,56 337,156 285,317 115,317 63,156" stroke="currentColor" stroke-width="0.9" stroke-dasharray="4 6" />
+            <polygon points="200,98 297,168 260,282 140,282 103,168" stroke="currentColor" stroke-width="1.1" />
+            <path d="M200 18 L244 134 M373 144 L268 198 M307 348 L224 260 M93 348 L158 242 M27 144 L148 164" stroke="currentColor" stroke-width="0.9" />
+            <circle cx="200" cy="200" r="184" stroke="currentColor" stroke-width="0.6" opacity="0.45" />
+          </g>
         </svg>
       </div>
 
@@ -301,7 +303,7 @@
     <!-- FOTO LOCALI (Cornici ad arco e rettangolo con nastro kraft stile The Mole / The MoUSE) -->
     <section class="places-showcase" aria-label="Interni dei luoghi principali di Ankon Benefit Company">
       <div class="wrap">
-        <figure class="reveal">
+        <figure>
           <div class="places-grid">
             <div class="place-frame place-frame--arch">
               <span class="kraft-tape kraft-tape--top" aria-hidden="true"></span>
@@ -598,11 +600,11 @@
     </section>
 
     <!-- GET IN TOUCH (Sezione contatti minimalista stile The Mole / The MoUSE) -->
-    <section class="contact-band" id="contatti" tabindex="-1" aria-labelledby="titolo-contatti">
+    <section class="contact-band" id="contatti-modulo" tabindex="-1" aria-labelledby="titolo-contatti-modulo" hidden>
       <div class="wrap contact-grid">
         <div class="reveal">
           <p class="eyebrow">Scrivici</p>
-          <h2 id="titolo-contatti" class="contact-title">Get in<br>touch</h2>
+          <h2 id="titolo-contatti-modulo" class="contact-title">Get in<br>touch</h2>
           <div class="whisker" aria-hidden="true"></div>
           <p class="contact-direct">
             Per collaborazioni culturali, fornitori o informazioni sulle attività di Ankon Benefit Company:<br>
@@ -637,6 +639,32 @@
           </div>
           <p class="form-feedback" id="form-feedback" aria-live="polite"></p>
         </form>
+      </div>
+    </section>
+    <section class="contact-band" id="contatti" tabindex="-1" aria-labelledby="titolo-contatti">
+      <div class="wrap contact-grid">
+        <div class="reveal">
+          <p class="eyebrow">Scrivici</p>
+          <h2 id="titolo-contatti" class="contact-title">Get in<br>touch</h2>
+          <div class="whisker" aria-hidden="true"></div>
+          <p class="contact-direct">
+            Per collaborazioni culturali, fornitori o informazioni sulle attività di Ankon Benefit Company:<br>
+            <a href="mailto:mail.abcsrl@gmail.com">mail.abcsrl@gmail.com</a>
+          </p>
+        </div>
+
+        <address class="contact-details reveal" aria-label="Recapiti di The Mole">
+          <dl>
+            <div>
+              <dt>Indirizzo · The Mole</dt>
+              <dd>Mole Vanvitelliana<br>Banchina Giovanni da Chio, 28<br>60121 Ancona (AN)</dd>
+            </div>
+            <div>
+              <dt>Telefono · The Mole</dt>
+              <dd><a href="tel:+393514188023">+39 351 41 88 023</a></dd>
+            </div>
+          </dl>
+        </address>
       </div>
     </section>
   </main>

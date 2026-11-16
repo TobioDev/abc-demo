@@ -105,6 +105,23 @@ function updateScrollUI() {
   }
 }
 
+const heroEmblemDetails = heroEmblem?.querySelector('.hero-emblem-details');
+if (heroEmblemDetails && prefersNoReducedMotion.matches) {
+  const finishDrawing = () => {
+    heroEmblem.classList.remove('is-drawing');
+    updateScrollUI();
+  };
+
+  heroEmblem.classList.add('is-drawing');
+  // Riattiva il movimento anche se la preferenza cambia durante il disegno.
+  const [drawing] = heroEmblemDetails.getAnimations?.() ?? [];
+  if (drawing) {
+    drawing.finished.then(finishDrawing, finishDrawing);
+  } else {
+    finishDrawing();
+  }
+}
+
 updateScrollUI();
 window.addEventListener('scroll', updateScrollUI, { passive: true });
 
@@ -139,6 +156,7 @@ if (heroSection && heroEmblem && prefersNoReducedMotion.matches && supportsFineH
   };
 
   heroSection.addEventListener('pointermove', (event) => {
+    if (heroEmblem.classList.contains('is-drawing') || !prefersNoReducedMotion.matches || event.pointerType === 'touch') return;
     const rect = heroSection.getBoundingClientRect();
     const nx = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
     const ny = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
@@ -232,6 +250,42 @@ if (staggerChipsGroup && prefersNoReducedMotion.matches) {
     { rootMargin: '0px 0px -38% 0px', threshold: 0.1 }
   );
   chipsObserver.observe(staggerChipsGroup);
+}
+
+// --- 4c. Ingresso delle foto e della didascalia ---
+const placesGrid = document.querySelector('.places-grid');
+const placesItems = document.querySelectorAll('.places-showcase :is(.place-frame, .places-caption)');
+const placesDesktop = window.matchMedia('(min-width: 721px)');
+
+if (placesGrid && placesItems.length && prefersNoReducedMotion.matches && 'IntersectionObserver' in window) {
+  const placesObserver = new IntersectionObserver((entries, observer) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting || entry.intersectionRatio < 0.12) continue;
+
+      if (entry.target === placesGrid) {
+        placesItems.forEach((item) => item.classList.add('is-visible'));
+        observer.disconnect();
+      } else {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    }
+  }, { threshold: 0.12 });
+
+  placesItems.forEach((item) => item.classList.add('js-places-ready'));
+
+  const observePlaces = () => {
+    placesObserver.disconnect();
+    const pending = Array.from(placesItems).filter((item) => !item.classList.contains('is-visible'));
+    if (placesDesktop.matches && pending.length === placesItems.length) {
+      placesObserver.observe(placesGrid);
+    } else {
+      pending.forEach((item) => placesObserver.observe(item));
+    }
+  };
+
+  placesDesktop.addEventListener('change', observePlaces);
+  observePlaces();
 }
 
 // --- 5. Slider criteri partner con frecce e snap fluido ---
